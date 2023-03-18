@@ -21,6 +21,9 @@
             1628
         </property>
         
+        <mapping class="mx.itson.benito.entidades.Articulo"/>
+        <mapping class="mx.itson.benito.entidades.Orden"/>
+        <mapping class="mx.itson.benito.entidades.Pedido"/>
         <mapping class="mx.itson.benito.entidades.Proveedor"/>
     </session-factory>
     

@@ -12,6 +12,6 @@ import mx.itson.benito.persistencia.ProveedorDAO;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println(ProveedorDAO.obtenerTodos().get(0).getEmail());
+        ProveedorDAO.eliminar(1);
     }
 }
