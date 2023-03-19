@@ -5,9 +5,11 @@
 package mx.itson.benito.persistencia;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
-import mx.itson.benito.entidades.Proveedor;
+import mx.itson.benito.entidades.Orden;
+import mx.itson.benito.entidades.Pedido;
 import mx.itson.benito.utilerias.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -16,82 +18,77 @@ import org.hibernate.Session;
  *
  * @author lm
  */
-public class ProveedorDAO {
-
-    public static List<Proveedor> obtenerTodos() {
-
-        List<Proveedor> proveedores = new ArrayList<>();
+public class OrdenDAO {
+    public static List<Orden> obtenerTodos() {
+        List<Orden> ordenes = new ArrayList<>();
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            CriteriaQuery<Proveedor> criteriaQuery
-                    = session.getCriteriaBuilder().createQuery(Proveedor.class);
-            criteriaQuery.from(Proveedor.class);
-
-            proveedores = session.createQuery(criteriaQuery).getResultList();
+            CriteriaQuery<Orden> criteriaQuery
+                    = session.getCriteriaBuilder().createQuery(Orden.class);
+            criteriaQuery.from(Orden.class);
+            
+            ordenes = session.createQuery(criteriaQuery).getResultList();
         } catch (HibernateException ex) {
             System.err.println("Ocurrió un error: " + ex.getMessage());
         }
-        return proveedores;
+        
+        return ordenes;
     }
-
-    public static boolean guardar(String nombre, String direccion, String telefono, String email, String contacto) {
+    
+    public static boolean guardar(List<Pedido> pedidos, double total, double subtotal, String comentario, Date fecha, String folio) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
-
-            Proveedor p = new Proveedor();
-            p.setNombre(nombre);
-            p.setDireccion(direccion);
-            p.setTelefono(telefono);
-            p.setEmail(email);
-            p.setContacto(contacto);
-
-            session.save(p);
-
+            
+            Orden o = new Orden();
+            o.setPedidos(pedidos);
+            o.setTotal(total);
+            o.setSubtotal(subtotal);
+            o.setComentario(comentario);
+            o.setFecha(fecha);
+            o.setFolio(folio);
+            
+            session.save(o);
             session.getTransaction().commit();
-
-            return p.getId() != 0;
-
+            
+            return o.getId() != 0;
         } catch (HibernateException ex) {
             System.err.println("Ocurrió un error: " + ex.getMessage());
         }
         return false;
     }
-
-    public static Proveedor obtenerPorId(int id) {
-        Proveedor p = null;
-
+    
+    public static Orden obtenerPorId(int id) {
+        Orden o = null;
+        
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            p = session.get(Proveedor.class, id);
-            
+            o = session.get(Orden.class, id);
         } catch (HibernateException ex) {
             System.err.println("Ocurrio un error: " + ex.getMessage());
         }
-        
-        return p;
+         return o;
     }
     
-    public static boolean editar(int id, String nombre, String direccion, String telefono, String email, String contacto) {
-        
+    public static boolean editar(int id, List<Pedido> pedidos, double total, double subtotal, String comentario, Date fecha, String folio) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             
-            Proveedor p = obtenerPorId(id);
+            Orden o = obtenerPorId(id);
             
-            if (p != null) {
-                p.setNombre(nombre);
-                p.setDireccion(direccion);
-                p.setTelefono(telefono);
-                p.setEmail(email);
-                p.setContacto(contacto);
+            if (o != null) {
+                o.setPedidos(pedidos);
+                o.setTotal(total);
+                o.setSubtotal(subtotal);
+                o.setComentario(comentario);
+                o.setFecha(fecha);
+                o.setFolio(folio);
                 
-                session.saveOrUpdate(p);
+                session.saveOrUpdate(o);
                 session.getTransaction().commit();
                 return true;
             }
-            
         } catch (HibernateException ex) {
             System.err.println("Ocurrio un error: " + ex.getMessage());
         }
@@ -104,10 +101,10 @@ public class ProveedorDAO {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             
-            Proveedor p = obtenerPorId(id);
+            Orden o = obtenerPorId(id);
             
-            if (p != null) {
-                session.delete(p);
+            if (o != null) {
+                session.delete(o);
                 session.getTransaction().commit();
                 return true;
             }

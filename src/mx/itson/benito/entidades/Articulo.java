@@ -9,7 +9,7 @@ public class Articulo {
     private String nombre;
     private double precio;
     private String folio;
-    private String proveedorId;
+    private int proveedorId;
 
     public int getId() {
         return id;
@@ -43,11 +43,11 @@ public class Articulo {
         this.folio = folio;
     }
 
-    public String getProveedorId() {
+    public int getProveedorId() {
         return proveedorId;
     }
 
-    public void setProveedorId(String proveedorId) {
+    public void setProveedorId(int proveedorId) {
         this.proveedorId = proveedorId;
     }
     
