@@ -1,15 +1,29 @@
 package mx.itson.benito.entidades;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author lm
  */
+@Entity
 public class Orden {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name ="ordenId")
     private List<Pedido> pedidos;
+    
     private double total;
     private double subtotal;
     private String comentario;
