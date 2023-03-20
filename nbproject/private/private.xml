@@ -3,7 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/lm/Code/Java/Benito/src/hibernate.cfg.xml</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/persistencia/OrdenDAO.java</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/ui/DetalleOrden.java</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/persistencia/ProveedorDAO.java</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/persistencia/ArticuloDAO.java</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/entidades/Articulo.java</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/entidades/Proveedor.java</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/entidades/Orden.java</file>
+            <file>file:/home/lm/Code/Java/Benito/src/mx/itson/benito/entidades/Pedido.java</file>
         </group>
     </open-files>
 </project-private>
