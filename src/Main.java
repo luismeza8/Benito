@@ -1,4 +1,3 @@
-
 import mx.itson.benito.persistencia.ArticuloDAO;
 import mx.itson.benito.persistencia.OrdenDAO;
 import mx.itson.benito.persistencia.PedidoDAO;
@@ -15,6 +14,6 @@ import mx.itson.benito.persistencia.ProveedorDAO;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println(OrdenDAO.obtenerPorId(1).getPedidos().get(0).getArticulo().getNombre());
+        System.out.println(OrdenDAO.eliminar(1));
     }
 }

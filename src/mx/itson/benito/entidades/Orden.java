@@ -1,6 +1,6 @@
 package mx.itson.benito.entidades;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -20,14 +22,17 @@ public class Orden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @OneToMany(cascade = CascadeType.MERGE)
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name ="ordenId")
     private List<Pedido> pedidos;
     
     private double total;
     private double subtotal;
     private String comentario;
+    
+    @Temporal(TemporalType.DATE)
     private Date fecha;
+    
     private String folio;    
 
     public int getId() {

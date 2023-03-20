@@ -5,7 +5,7 @@
 package mx.itson.benito.persistencia;
 
 import java.util.ArrayList;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
 import mx.itson.benito.entidades.Orden;
@@ -52,7 +52,7 @@ public class OrdenDAO {
             session.getTransaction().commit();
             
             return o.getId() != 0;
-        } catch (HibernateException ex) {
+        } catch (Exception ex) {
             System.err.println("Ocurrió un error: " + ex.getMessage());
         }
         return false;
@@ -108,7 +108,7 @@ public class OrdenDAO {
                 session.getTransaction().commit();
                 return true;
             }
-        } catch (HibernateException ex) {
+        } catch (Exception ex) {
             System.err.println("Ocurrio un error: " + ex.getMessage());
         }
 

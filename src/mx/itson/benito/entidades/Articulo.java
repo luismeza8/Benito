@@ -5,6 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -18,7 +24,11 @@ public class Articulo {
     private String nombre;
     private double precio;
     private String folio;
-    private int proveedorId;
+    
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "proveedorId")
+    private Proveedor proveedor;
 
     public int getId() {
         return id;
@@ -52,12 +62,12 @@ public class Articulo {
         this.folio = folio;
     }
 
-    public int getProveedorId() {
-        return proveedorId;
+    public Proveedor getProveedor() {
+        return proveedor;
     }
 
-    public void setProveedorId(int proveedorId) {
-        this.proveedorId = proveedorId;
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
     }
     
     

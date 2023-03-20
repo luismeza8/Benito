@@ -6,8 +6,10 @@ package mx.itson.benito.persistencia;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import mx.itson.benito.entidades.Articulo;
+import mx.itson.benito.entidades.Proveedor;
 import mx.itson.benito.utilerias.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -35,7 +37,7 @@ public class ArticuloDAO {
         return articulos;
     }
     
-    public static boolean guardar(String nombre, double precio, String folio, int proveedorId) {
+    public static boolean guardar(String nombre, double precio, String folio, Proveedor proveedor) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -44,7 +46,7 @@ public class ArticuloDAO {
             a.setNombre(nombre);
             a.setPrecio(precio);
             a.setFolio(folio);
-            a.setProveedorId(proveedorId);
+            a.setProveedor(proveedor);
             
             session.save(a);
             session.getTransaction().commit();
@@ -70,7 +72,7 @@ public class ArticuloDAO {
         return a;
     }
     
-    public static boolean editar(int id, String nombre, double precio, String folio, int proveedorId) {
+    public static boolean editar(int id, String nombre, double precio, String folio, Proveedor proveedor) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -81,7 +83,7 @@ public class ArticuloDAO {
                 a.setNombre(nombre);
                 a.setPrecio(precio);
                 a.setFolio(folio);
-                a.setProveedorId(proveedorId);
+                a.setProveedor(proveedor);
                 
                 session.saveOrUpdate(a);
                 session.getTransaction().commit();

@@ -111,7 +111,7 @@ public class ProveedorDAO {
                 session.getTransaction().commit();
                 return true;
             }
-        } catch (HibernateException ex) {
+        } catch (Exception ex) {
             System.err.println("Ocurrio un error: " + ex.getMessage());
         }
 
