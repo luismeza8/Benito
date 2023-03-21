@@ -43,11 +43,11 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Folio", "Total", "Subtotal", "Fecha"
+                "ID", "Folio", "Total", "Subtotal", "Fecha"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                true, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -61,10 +61,10 @@ public class Main extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblOrdenes);
         if (tblOrdenes.getColumnModel().getColumnCount() > 0) {
-            tblOrdenes.getColumnModel().getColumn(0).setResizable(false);
             tblOrdenes.getColumnModel().getColumn(1).setResizable(false);
             tblOrdenes.getColumnModel().getColumn(2).setResizable(false);
             tblOrdenes.getColumnModel().getColumn(3).setResizable(false);
+            tblOrdenes.getColumnModel().getColumn(4).setResizable(false);
         }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 900, -1));
@@ -74,7 +74,9 @@ public class Main extends javax.swing.JFrame {
 
     private void tblOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdenesMouseClicked
         int filaSeleccionada = tblOrdenes.getSelectedRow();
-        DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(filaSeleccionada+1));
+        String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
+        
+        DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id)));
         j.setVisible(true);
     }//GEN-LAST:event_tblOrdenesMouseClicked
 
@@ -120,9 +122,10 @@ public class Main extends javax.swing.JFrame {
         for (Orden o : OrdenDAO.obtenerTodos()) {
             modelTblOrdenes.addRow(
                     new Object[] {
+                        o.getId(),
                         o.getFolio(),
-                        o.getTotal(),
-                        o.getSubtotal(),
+                        "$" + o.getTotal(),
+                        "$" + o.getSubtotal(),
                         o.getFecha()
                     }
             );

@@ -4,9 +4,12 @@
  */
 package mx.itson.benito.ui;
 
+import java.awt.Frame;
 import javax.swing.table.DefaultTableModel;
+import mx.itson.benito.entidades.Articulo;
 import mx.itson.benito.entidades.Orden;
 import mx.itson.benito.entidades.Pedido;
+import mx.itson.benito.persistencia.ArticuloDAO;
 
 /**
  *
@@ -15,14 +18,21 @@ import mx.itson.benito.entidades.Pedido;
 public class DetalleOrden extends javax.swing.JDialog {
 
     Orden orden;
+    Frame frame;
     
     /**
      * Creates new form DetalleOrden
      */
     public DetalleOrden(java.awt.Frame parent, boolean modal, Orden orden) {
         super(parent, modal);
+        setModal(true);
         initComponents();
+        
+        modelPedidosTbl = (DefaultTableModel) tblArticulos.getModel();
+        
         this.orden = orden;
+        this.frame = parent;
+        
         llenarOrden();
     }
 
@@ -61,6 +71,11 @@ public class DetalleOrden extends javax.swing.JDialog {
                 "Numero", "Articulo", "Cantidad"
             }
         ));
+        tblArticulos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblArticulosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblArticulos);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 400, 410));
@@ -90,6 +105,15 @@ public class DetalleOrden extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tblArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblArticulosMouseClicked
+        int filaSeleccionada = tblArticulos.getSelectedRow();
+        String id = modelPedidosTbl.getValueAt(filaSeleccionada, 0).toString();
+        
+        DetalleArticulo a = new DetalleArticulo(frame, true, ArticuloDAO.obtenerPorId(Integer.parseInt(id)));
+        a.setVisible(true);
+        
+    }//GEN-LAST:event_tblArticulosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -133,6 +157,8 @@ public class DetalleOrden extends javax.swing.JDialog {
         });
     }
     
+    DefaultTableModel modelPedidosTbl;
+    
     private void llenarOrden() {
         txtTitulo.setText(txtTitulo.getText() + orden.getFolio());
         llenarTablaArticulos();
@@ -143,11 +169,10 @@ public class DetalleOrden extends javax.swing.JDialog {
     }
     
     private void llenarTablaArticulos(){
-        int index = 1;
-        DefaultTableModel pedidosTblModel = (DefaultTableModel) tblArticulos.getModel();
+        int index = 1; 
         
         for (Pedido p : orden.getPedidos()) {
-            pedidosTblModel.addRow(
+            modelPedidosTbl.addRow(
                     new Object[] {
                         index++,
                         p.getArticulo().getNombre(),
