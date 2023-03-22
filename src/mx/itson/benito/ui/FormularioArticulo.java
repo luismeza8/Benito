@@ -4,6 +4,11 @@
  */
 package mx.itson.benito.ui;
 
+import javax.swing.DefaultComboBoxModel;
+import mx.itson.benito.entidades.Proveedor;
+import mx.itson.benito.persistencia.ArticuloDAO;
+import mx.itson.benito.persistencia.ProveedorDAO;
+
 /**
  *
  * @author lm
@@ -16,6 +21,7 @@ public class FormularioArticulo extends javax.swing.JDialog {
     public FormularioArticulo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        llenarComboBox();
     }
 
     /**
@@ -71,14 +77,17 @@ public class FormularioArticulo extends javax.swing.JDialog {
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 460, -1, -1));
 
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 460, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Articulo");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 40));
-
-        cbxProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(cbxProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 280, -1));
 
         jLabel2.setText("Proveedor:");
@@ -103,8 +112,25 @@ public class FormularioArticulo extends javax.swing.JDialog {
     }//GEN-LAST:event_tfdNombreActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        Proveedor p = (Proveedor) cbxProveedor.getSelectedItem();
+        
+        try {            
+            ArticuloDAO.guardar(
+                    tfdNombre.getText(), 
+                    Double.parseDouble(tfdPrecio.getText()), 
+                    tfdFolio.getText(), 
+                    p
+            );
+            
+            this.dispose();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,11 +173,21 @@ public class FormularioArticulo extends javax.swing.JDialog {
             }
         });
     }
+    
+    private void llenarComboBox() {
+        DefaultComboBoxModel modelProveedoresCbx = (DefaultComboBoxModel) cbxProveedor.getModel();
+        
+        for (Proveedor p : ProveedorDAO.obtenerTodos()) {
+            modelProveedoresCbx.addElement(p);
+        }
+        
+        cbxProveedor.setModel(modelProveedoresCbx);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JComboBox<String> cbxProveedor;
+    private javax.swing.JComboBox<Proveedor> cbxProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

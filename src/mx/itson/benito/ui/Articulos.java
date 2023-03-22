@@ -4,18 +4,26 @@
  */
 package mx.itson.benito.ui;
 
+import javax.swing.table.DefaultTableModel;
+import mx.itson.benito.entidades.Articulo;
+import mx.itson.benito.persistencia.ArticuloDAO;
+
 /**
  *
  * @author lm
  */
 public class Articulos extends javax.swing.JDialog {
 
+    java.awt.Frame parent;
+    
     /**
      * Creates new form Articulos
      */
     public Articulos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.parent = parent;
+        llenarTabla();
     }
 
     /**
@@ -30,7 +38,7 @@ public class Articulos extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblProveedores = new javax.swing.JTable();
+        tblArticulos = new javax.swing.JTable();
         btnAgregar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
@@ -44,7 +52,7 @@ public class Articulos extends javax.swing.JDialog {
         jLabel1.setText("Articulos");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 40));
 
-        tblProveedores.setModel(new javax.swing.table.DefaultTableModel(
+        tblArticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -60,18 +68,23 @@ public class Articulos extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblProveedores);
-        if (tblProveedores.getColumnModel().getColumnCount() > 0) {
-            tblProveedores.getColumnModel().getColumn(0).setResizable(false);
-            tblProveedores.getColumnModel().getColumn(1).setResizable(false);
-            tblProveedores.getColumnModel().getColumn(2).setResizable(false);
-            tblProveedores.getColumnModel().getColumn(3).setResizable(false);
-            tblProveedores.getColumnModel().getColumn(4).setResizable(false);
+        jScrollPane1.setViewportView(tblArticulos);
+        if (tblArticulos.getColumnModel().getColumnCount() > 0) {
+            tblArticulos.getColumnModel().getColumn(0).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(1).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(2).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(3).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(4).setResizable(false);
         }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 550, 240));
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, -1, -1));
 
         btnEliminar.setText("Eliminar");
@@ -93,6 +106,10 @@ public class Articulos extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        new FormularioArticulo(parent, true).setVisible(true);
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,6 +152,22 @@ public class Articulos extends javax.swing.JDialog {
             }
         });
     }
+    
+    private void llenarTabla() {
+        DefaultTableModel modelArticulosTbl = (DefaultTableModel) tblArticulos.getModel();
+        
+        for (Articulo a : ArticuloDAO.obtenerTodos()) {
+            modelArticulosTbl.addRow(
+                new Object[] {
+                    a.getId(),
+                    a.getNombre(),
+                    a.getPrecio(),
+                    a.getFolio(),
+                    a.getProveedor().getNombre()
+                }
+        );
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
@@ -143,6 +176,6 @@ public class Articulos extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblProveedores;
+    private javax.swing.JTable tblArticulos;
     // End of variables declaration//GEN-END:variables
 }

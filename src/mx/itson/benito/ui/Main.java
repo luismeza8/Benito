@@ -89,6 +89,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, -1, -1));
 
         btnAgregarOrden.setText("Agregar orden");
+        btnAgregarOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarOrdenActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAgregarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, -1, -1));
 
         btnEliminarOrden.setText("Eliminar orden");
@@ -101,6 +106,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(btnVerDetalleOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 460, -1, -1));
 
         btnVerTodosLosArticulos.setText("Ver todos los articulos");
+        btnVerTodosLosArticulos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodosLosArticulosActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnVerTodosLosArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, -1, -1));
 
         txtTotalArticulos.setText("Total de articulos: ");
@@ -110,6 +120,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(txtTotalProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, -1, -1));
 
         btnVerTodosLosProveedores.setText("Ver todos los proveedores");
+        btnVerTodosLosProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodosLosProveedoresActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnVerTodosLosProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, -1, -1));
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 489, 10, 10));
 
@@ -123,6 +138,21 @@ public class Main extends javax.swing.JFrame {
         DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id)));
         j.setVisible(true);
     }//GEN-LAST:event_tblOrdenesMouseClicked
+
+    private void btnVerTodosLosArticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosLosArticulosActionPerformed
+        Articulos articulos = new Articulos(this, true);
+        articulos.setVisible(true);
+    }//GEN-LAST:event_btnVerTodosLosArticulosActionPerformed
+
+    private void btnVerTodosLosProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosLosProveedoresActionPerformed
+        Proveedores proveedores = new Proveedores(this, true);
+        proveedores.setVisible(true);
+    }//GEN-LAST:event_btnVerTodosLosProveedoresActionPerformed
+
+    private void btnAgregarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarOrdenActionPerformed
+        FormularioOrden formularioOrden = new FormularioOrden(this, true);
+        formularioOrden.setVisible(true);
+    }//GEN-LAST:event_btnAgregarOrdenActionPerformed
 
     DefaultTableModel modelTblOrdenes;
     

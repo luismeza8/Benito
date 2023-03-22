@@ -4,6 +4,8 @@
  */
 package mx.itson.benito.ui;
 
+import mx.itson.benito.persistencia.ProveedorDAO;
+
 /**
  *
  * @author lm
@@ -78,6 +80,11 @@ public class FormularioProveedor extends javax.swing.JDialog {
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 460, -1, -1));
 
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 460, -1, -1));
 
         jLabel6.setText("Email:");
@@ -107,8 +114,24 @@ public class FormularioProveedor extends javax.swing.JDialog {
     }//GEN-LAST:event_tfdNombreActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        try {
+            ProveedorDAO.guardar(
+                    tfdNombre.getText(),
+                    tfdDireccion.getText(), 
+                    tfdTelefono.getText(), 
+                    tfdEmail.getText(), 
+                    tfdContacto.getText()
+            );
+            
+            this.dispose();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     /**
      * @param args the command line arguments

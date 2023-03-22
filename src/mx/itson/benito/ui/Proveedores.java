@@ -4,18 +4,27 @@
  */
 package mx.itson.benito.ui;
 
+import java.awt.Frame;
+import javax.swing.table.DefaultTableModel;
+import mx.itson.benito.entidades.Proveedor;
+import mx.itson.benito.persistencia.ProveedorDAO;
+
 /**
  *
  * @author lm
  */
 public class Proveedores extends javax.swing.JDialog {
 
+    Frame frame;
+    
     /**
      * Creates new form Proveedores
      */
     public Proveedores(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.frame = parent;
+        llenarTabla();
     }
 
     /**
@@ -76,6 +85,11 @@ public class Proveedores extends javax.swing.JDialog {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 550, 240));
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, -1, -1));
 
         btnEliminar.setText("Eliminar");
@@ -98,6 +112,11 @@ public class Proveedores extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        FormularioProveedor formularioProveedor = new FormularioProveedor(frame, true);
+        formularioProveedor.setVisible(true);
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -139,6 +158,23 @@ public class Proveedores extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    private void llenarTabla() {
+        DefaultTableModel modelProveedoresTbl = (DefaultTableModel) tblProveedores.getModel();
+        
+        for (Proveedor p : ProveedorDAO.obtenerTodos()) {
+            modelProveedoresTbl.addRow(
+                    new Object[] {
+                        p.getId(),
+                        p.getNombre(),
+                        p.getDireccion(),
+                        p.getTelefono(),
+                        p.getEmail(),
+                        p.getContacto()
+                    }
+            );
+        }            
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
