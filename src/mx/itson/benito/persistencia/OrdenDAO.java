@@ -78,7 +78,7 @@ public class OrdenDAO {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             
-            Orden o = obtenerPorId(id);
+            Orden o = session.get(Orden.class, id);
             
             if (o != null) {
                 o.setPedidos(pedidos);
@@ -88,7 +88,7 @@ public class OrdenDAO {
                 o.setFecha(fecha);
                 o.setFolio(folio);
                 
-                session.saveOrUpdate(o);
+                session.update(o);
                 session.getTransaction().commit();
                 return true;
             }

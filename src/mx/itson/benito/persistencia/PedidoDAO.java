@@ -71,19 +71,20 @@ public class PedidoDAO {
         return p;
     }
     
-    public static boolean editar(int id, Articulo articulo, int cantidad) {
+    public static boolean editar(int id, Articulo articulo, Orden orden, int cantidad) {
         
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             
-            Pedido p = obtenerPorId(id);
+            Pedido p = session.get(Pedido.class, id);
             
             if (p != null) {
                 p.setArticulo(articulo);
+                p.setOrden(orden);
                 p.setCantidad(cantidad);
                 
-                session.saveOrUpdate(p);
+                session.update(p);
                 session.getTransaction().commit();
                 return true;
             }

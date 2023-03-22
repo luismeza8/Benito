@@ -21,10 +21,11 @@ import mx.itson.benito.persistencia.PedidoDAO;
  */
 public class FormularioOrden extends javax.swing.JDialog {
 
-    java.awt.Frame parent;
+    private final java.awt.Frame parent;
+    private final DefaultTableModel modelPedidosTbl;
+    private final Orden orden;
+    private List<Pedido> pedidos = new ArrayList<>();
     private Pedido pedido;
-    List<Pedido> pedidos = new ArrayList<>();
-    DefaultTableModel modelPedidosTbl;
     
     public Pedido getPedido() {
         return pedido;
@@ -37,13 +38,23 @@ public class FormularioOrden extends javax.swing.JDialog {
     /**
      * Creates new form FormularioOrden
      */
-    public FormularioOrden(java.awt.Frame parent, boolean modal) {
+    public FormularioOrden(java.awt.Frame parent, boolean modal, Orden orden) {
         super(parent, modal);
         initComponents();
         this.parent = parent;
+        this.orden = orden;
         
         modelPedidosTbl = (DefaultTableModel) tblPedidos.getModel();
-        llenarTabla();
+        
+        if(this.pedido != null) {
+            llenarTabla(pedido);
+        }
+        
+        if(this.orden != null) {
+            pedidos = orden.getPedidos();
+        }
+        
+        llenarFormulario();
     }
 
     /**
@@ -185,7 +196,9 @@ public class FormularioOrden extends javax.swing.JDialog {
         
         pedidos.add(pedido);
         
-        llenarTabla();
+        if(this.pedido != null) {
+            llenarTabla(pedido);
+        }
     }//GEN-LAST:event_btnAgregarArticuloActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
@@ -201,8 +214,15 @@ public class FormularioOrden extends javax.swing.JDialog {
             o.setFolio(tfdFolio.getText());
             
             for (Pedido p : pedidos) {
-                p.setOrden(o);
-                PedidoDAO.guardar(p.getArticulo(), p.getOrden(), p.getCantidad());
+                p.setOrden(o);             
+                //PedidoDAO.guardar(p.getArticulo(), p.getOrden(), p.getCantidad());
+                
+                if(this.orden != null) {
+                    OrdenDAO.editar(orden.getId(), pedidos, 0, 0, tfdComentario.getText(), formato.parse(tfdFecha.getText()), tfdFolio.getText());
+                    //PedidoDAO.editar(p.getId(), p.getArticulo(), p.getOrden(), p.getCantidad());
+                    
+                    
+                } 
             }
             
             this.dispose();
@@ -215,7 +235,6 @@ public class FormularioOrden extends javax.swing.JDialog {
     private void btnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarArticuloActionPerformed
         try {
             int filaSeleccionada = tblPedidos.getSelectedRow();
-            String id = modelPedidosTbl.getValueAt(filaSeleccionada, 0).toString();
             
             if(JOptionPane.showConfirmDialog(parent, "¿Quieres quitar este articulo?") == JOptionPane.YES_OPTION){
                 modelPedidosTbl.removeRow(filaSeleccionada);
@@ -257,7 +276,7 @@ public class FormularioOrden extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FormularioOrden dialog = new FormularioOrden(new javax.swing.JFrame(), true);
+                FormularioOrden dialog = new FormularioOrden(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -269,14 +288,24 @@ public class FormularioOrden extends javax.swing.JDialog {
         });
     }
     
-    public void llenarTabla(){
-        if (pedido != null) {            
+    private void llenarTabla(Pedido pedido){            
             modelPedidosTbl.addRow(
                     new Object [] {
-                        this.pedido.getArticulo(),
-                        this.pedido.getCantidad()
+                        pedido.getArticulo(),
+                        pedido.getCantidad()
                 }
             );
+    }
+    
+    private void llenarFormulario() {
+        if (this.orden != null) {
+            tfdFolio.setText(orden.getFolio());
+            tfdFecha.setText(orden.getFecha().toString());
+            tfdComentario.setText(orden.getComentario());
+            
+            for (Pedido p : orden.getPedidos()) {
+                llenarTabla(p);
+            }
         }
     }
 

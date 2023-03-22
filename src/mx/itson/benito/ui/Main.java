@@ -114,6 +114,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(btnActualizarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, -1, -1));
 
         btnVerDetalleOrden.setText("Ver detalle de la orden");
+        btnVerDetalleOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerDetalleOrdenActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnVerDetalleOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 460, -1, -1));
 
         btnVerTodosLosArticulos.setText("Ver todos los articulos");
@@ -161,7 +166,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerTodosLosProveedoresActionPerformed
 
     private void btnAgregarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarOrdenActionPerformed
-        FormularioOrden formularioOrden = new FormularioOrden(this, true);
+        FormularioOrden formularioOrden = new FormularioOrden(this, true, null);
         formularioOrden.setVisible(true);
         
         modelTblOrdenes.setRowCount(0);
@@ -169,7 +174,14 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarOrdenActionPerformed
 
     private void btnActualizarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarOrdenActionPerformed
-        
+        try {
+            int filaSeleccionada = tblOrdenes.getSelectedRow();
+            String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
+            
+            new FormularioOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id))).setVisible(true);
+        } catch (Exception e) {
+            
+        }
     }//GEN-LAST:event_btnActualizarOrdenActionPerformed
 
     private void btnEliminarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarOrdenActionPerformed
@@ -188,6 +200,18 @@ public class Main extends javax.swing.JFrame {
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarOrdenActionPerformed
+
+    private void btnVerDetalleOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetalleOrdenActionPerformed
+        try {
+            int filaSeleccionada = tblOrdenes.getSelectedRow();
+        String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
+        
+        DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id)));
+        j.setVisible(true);
+        } catch (Exception e) {
+            
+        }
+    }//GEN-LAST:event_btnVerDetalleOrdenActionPerformed
 
     DefaultTableModel modelTblOrdenes;
     
