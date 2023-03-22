@@ -4,6 +4,7 @@
  */
 package mx.itson.benito.ui;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Orden;
 import mx.itson.benito.persistencia.OrdenDAO;
@@ -97,6 +98,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(btnAgregarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, -1, -1));
 
         btnEliminarOrden.setText("Eliminar orden");
+        btnEliminarOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarOrdenActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEliminarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 460, -1, -1));
 
         btnActualizarOrden.setText("Actualizar orden");
@@ -137,11 +143,11 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdenesMouseClicked
-        int filaSeleccionada = tblOrdenes.getSelectedRow();
-        String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
+        //int filaSeleccionada = tblOrdenes.getSelectedRow();
+        //String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
         
-        DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id)));
-        j.setVisible(true);
+        //DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id)));
+        //j.setVisible(true);
     }//GEN-LAST:event_tblOrdenesMouseClicked
 
     private void btnVerTodosLosArticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosLosArticulosActionPerformed
@@ -162,6 +168,23 @@ public class Main extends javax.swing.JFrame {
     private void btnActualizarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarOrdenActionPerformed
         
     }//GEN-LAST:event_btnActualizarOrdenActionPerformed
+
+    private void btnEliminarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarOrdenActionPerformed
+        try {
+            int filaSeleccionada = tblOrdenes.getSelectedRow();
+            String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
+            
+            if (JOptionPane.showConfirmDialog(this, "¿Deseas eliminar esta orden?") == JOptionPane.YES_OPTION) {
+                OrdenDAO.eliminar(Integer.parseInt(id));
+                modelTblOrdenes.setRowCount(0);
+                llenarOrdenes();
+            }
+            
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnEliminarOrdenActionPerformed
 
     DefaultTableModel modelTblOrdenes;
     
@@ -195,6 +218,7 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                OrdenDAO.eliminar(1);
                 new Main().setVisible(true);
             }
         });

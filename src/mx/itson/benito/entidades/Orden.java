@@ -22,8 +22,8 @@ public class Orden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name ="ordenId")
+    @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JoinColumn(name ="ordenId")
     private List<Pedido> pedidos;
     
     private double total;

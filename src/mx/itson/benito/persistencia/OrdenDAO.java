@@ -101,7 +101,7 @@ public class OrdenDAO {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             
-            Orden o = obtenerPorId(id);
+            Orden o = session.get(Orden.class, id);
             
             if (o != null) {
                 session.delete(o);
