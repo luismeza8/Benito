@@ -21,8 +21,8 @@ CREATE TABLE Articulo(
 
 CREATE TABLE Orden(
 	id INT PRIMARY KEY AUTO_INCREMENT,
-	total DECIMAL(6, 2),
-	subtotal DECIMAL(6, 2),
+	total DECIMAL(10, 2),
+	subtotal DECIMAL(10, 2),
 	comentario VARCHAR(100),
 	fecha DATE,
 	folio VARCHAR(10)
@@ -36,6 +36,39 @@ CREATE TABLE Pedido(
 	FOREIGN KEY (articuloId) REFERENCES Articulo(id) ON DELETE CASCADE,
 	FOREIGN KEY (ordenId) REFERENCES Orden(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+DELIMITER //
+
+CREATE PROCEDURE calculate_order_total(IN order_id INT)
+BEGIN
+  UPDATE Orden SET 
+    total = (
+        SELECT SUM(Articulo.precio * Pedido.cantidad)
+        FROM Pedido
+        INNER JOIN Articulo ON Pedido.articuloId = Articulo.id
+        WHERE Pedido.ordenId = order_id
+    ),
+    subtotal = (
+        SELECT SUM(Articulo.precio * Pedido.cantidad)
+      FROM Pedido
+      INNER JOIN Articulo ON Pedido.articuloId = Articulo.id
+      WHERE Pedido.ordenId = order_id
+    ) * 1.16
+  WHERE id = order_id;
+END//
+
+DELIMITER ;
+
+CREATE TRIGGER update_order_total_after_insert
+AFTER INSERT ON Pedido
+FOR EACH ROW
+  CALL calculate_order_total(NEW.ordenId);
+
+
+CREATE TRIGGER update_order_total_after_update
+AFTER UPDATE ON Pedido
+FOR EACH ROW
+  CALL calculate_order_total(NEW.ordenId);
 
 
 -- Proveedores --
@@ -61,16 +94,13 @@ VALUES
     ('Alambre de acero para cinturón de llantas', 3000, 'F20', 1);
 
 
-INSERT INTO Orden (total, subtotal, comentario, fecha, folio)
-VALUES (1.5, 2.0, "Bien", '2018-05-12', "00001");
-INSERT INTO Orden (total, subtotal, comentario, fecha, folio)
-VALUES (1.4, 2.0, "Bien", '2018-05-12', "00001");
-INSERT INTO Orden (total, subtotal, comentario, fecha, folio)
-VALUES (1.2, 2.0, "Bien", '2018-05-12', "00001");
-INSERT INTO Orden (total, subtotal, comentario, fecha, folio)
-VALUES (2.5, 2.0, "Bien", '2018-05-12', "00001");
-INSERT INTO Orden (total, subtotal, comentario, fecha, folio)
-VALUES (3.5, 2.0, "Bien", '2018-05-12', "00001");
+INSERT INTO Orden (comentario, fecha, folio)
+VALUES 
+    ("Material necesario", '2022-12-12', "00001"),
+    ("Buen servicio", '2022-12-27', "00002"),
+    ("Para el nuevo modelo de llantas", '2023-01-17', "00003"),
+    ("Falta de pago", '2023-02-18', "00004"),
+    ("Gran servicio", '2023-03-08', "00005");
 
 INSERT INTO Pedido (articuloId, ordenId, cantidad)
 VALUES

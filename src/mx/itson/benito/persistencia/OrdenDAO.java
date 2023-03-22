@@ -49,15 +49,13 @@ public class OrdenDAO {
      * @param folio El folio de la nueva orden
      * @return Un booleano con la confirmacion del metodo
      */
-    public static boolean guardar(List<Pedido> pedidos, double total, double subtotal, String comentario, Date fecha, String folio) {
+    public static boolean guardar(List<Pedido> pedidos, String comentario, Date fecha, String folio) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             Orden o = new Orden();
             o.setPedidos(pedidos);
-            o.setTotal(total);
-            o.setSubtotal(subtotal);
             o.setComentario(comentario);
             o.setFecha(fecha);
             o.setFolio(folio);
@@ -102,7 +100,7 @@ public class OrdenDAO {
      * @param folio El nuevo folio de la orden
      * @return Un boolean con el resultado del metodo
      */
-    public static boolean editar(int id, List<Pedido> pedidos, double total, double subtotal, String comentario, Date fecha, String folio) {
+    public static boolean editar(int id, List<Pedido> pedidos, String comentario, Date fecha, String folio) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -111,8 +109,6 @@ public class OrdenDAO {
 
             if (o != null) {
                 o.setPedidos(pedidos);
-                o.setTotal(total);
-                o.setSubtotal(subtotal);
                 o.setComentario(comentario);
                 o.setFecha(fecha);
                 o.setFolio(folio);

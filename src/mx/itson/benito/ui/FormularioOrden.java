@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Orden;
 import mx.itson.benito.entidades.Pedido;
 import mx.itson.benito.persistencia.OrdenDAO;
+import mx.itson.benito.persistencia.PedidoDAO;
 
 /**
  * Formulario para agregar o editar una orden
@@ -200,6 +201,17 @@ public class FormularioOrden extends javax.swing.JDialog {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
+            
+            if (this.orden != null) {
+                OrdenDAO.editar(
+                        orden.getId(), 
+                        pedidos,
+                        tfdComentario.getText(), 
+                        formato.parse(tfdFecha.getText()), 
+                        tfdFolio.getText()
+                );
+            }
+            
             Orden o = new Orden();
 
             o.setTotal(0);
@@ -210,13 +222,15 @@ public class FormularioOrden extends javax.swing.JDialog {
 
             for (Pedido p : pedidos) {
                 p.setOrden(o);
-                //PedidoDAO.guardar(p.getArticulo(), p.getOrden(), p.getCantidad());
+                PedidoDAO.guardar(p.getArticulo(), p.getOrden(), p.getCantidad());
 
+                /*
                 if (this.orden != null) {
                     OrdenDAO.editar(orden.getId(), pedidos, 0, 0, tfdComentario.getText(), formato.parse(tfdFecha.getText()), tfdFolio.getText());
                     //PedidoDAO.editar(p.getId(), p.getArticulo(), p.getOrden(), p.getCantidad());
 
                 }
+                */
             }
 
             this.dispose();
