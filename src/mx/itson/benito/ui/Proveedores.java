@@ -5,6 +5,7 @@
 package mx.itson.benito.ui;
 
 import java.awt.Frame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Proveedor;
 import mx.itson.benito.persistencia.ProveedorDAO;
@@ -24,6 +25,8 @@ public class Proveedores extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.frame = parent;
+        this.modelProveedoresTbl = (DefaultTableModel) tblProveedores.getModel();
+        
         llenarTabla();
     }
 
@@ -93,6 +96,11 @@ public class Proveedores extends javax.swing.JDialog {
         jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, -1, -1));
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 300, -1, -1));
 
         btnActualizar.setText("Actualizar");
@@ -116,7 +124,26 @@ public class Proveedores extends javax.swing.JDialog {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         FormularioProveedor formularioProveedor = new FormularioProveedor(frame, true);
         formularioProveedor.setVisible(true);
+        modelProveedoresTbl.setRowCount(0);
+        llenarTabla();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        
+        try {
+            int filaSeleccionada = tblProveedores.getSelectedRow();
+            String id = modelProveedoresTbl.getValueAt(filaSeleccionada, 0).toString();
+        
+            if (JOptionPane.showConfirmDialog(this, "¿Deseas eliminar este proveedor?") == JOptionPane.YES_OPTION) {
+                modelProveedoresTbl.setNumRows(0);
+                llenarTabla();
+                ProveedorDAO.eliminar(Integer.parseInt(id));
+            }
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,9 +187,7 @@ public class Proveedores extends javax.swing.JDialog {
         });
     }
     
-    private void llenarTabla() {
-        DefaultTableModel modelProveedoresTbl = (DefaultTableModel) tblProveedores.getModel();
-        
+    private void llenarTabla() {        
         for (Proveedor p : ProveedorDAO.obtenerTodos()) {
             modelProveedoresTbl.addRow(
                     new Object[] {
@@ -176,6 +201,8 @@ public class Proveedores extends javax.swing.JDialog {
             );
         }            
     }
+    
+    DefaultTableModel modelProveedoresTbl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;

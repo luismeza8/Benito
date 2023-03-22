@@ -4,6 +4,7 @@
  */
 package mx.itson.benito.ui;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Articulo;
 import mx.itson.benito.persistencia.ArticuloDAO;
@@ -23,6 +24,8 @@ public class Articulos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.parent = parent;
+        this.modelArticulosTbl = (DefaultTableModel) tblArticulos.getModel();
+        
         llenarTabla();
     }
 
@@ -88,6 +91,11 @@ public class Articulos extends javax.swing.JDialog {
         jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, -1, -1));
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 300, -1, -1));
 
         btnActualizar.setText("Actualizar");
@@ -109,7 +117,25 @@ public class Articulos extends javax.swing.JDialog {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         new FormularioArticulo(parent, true).setVisible(true);
+        modelArticulosTbl.setRowCount(0);
+        llenarTabla();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        try {
+            int filaSeleccionada = tblArticulos.getSelectedRow();
+            String id = modelArticulosTbl.getValueAt(filaSeleccionada, 0).toString();
+            
+            if (JOptionPane.showConfirmDialog(parent, "¿Deseas eliminar este articulo?") == JOptionPane.YES_OPTION) {
+                ArticuloDAO.eliminar(Integer.parseInt(id));
+                modelArticulosTbl.setRowCount(0);
+                llenarTabla();
+            }
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,9 +179,7 @@ public class Articulos extends javax.swing.JDialog {
         });
     }
     
-    private void llenarTabla() {
-        DefaultTableModel modelArticulosTbl = (DefaultTableModel) tblArticulos.getModel();
-        
+    private void llenarTabla() {        
         for (Articulo a : ArticuloDAO.obtenerTodos()) {
             modelArticulosTbl.addRow(
                 new Object[] {
@@ -168,6 +192,8 @@ public class Articulos extends javax.swing.JDialog {
         );
         }
     }
+    
+    DefaultTableModel modelArticulosTbl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
