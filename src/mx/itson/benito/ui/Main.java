@@ -4,6 +4,7 @@ import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Orden;
+import mx.itson.benito.persistencia.EstadoDAO;
 import mx.itson.benito.persistencia.OrdenDAO;
 
 /**
@@ -46,6 +47,7 @@ public final class Main extends javax.swing.JFrame {
         txtTotalProveedores = new javax.swing.JLabel();
         btnVerTodosLosProveedores = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        btnEstado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -55,11 +57,11 @@ public final class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Folio", "Total", "Subtotal", "Fecha"
+                "ID", "Folio", "Total", "Subtotal", "Fecha", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false
+                true, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -79,7 +81,7 @@ public final class Main extends javax.swing.JFrame {
             tblOrdenes.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 260));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 220));
 
         jLabel1.setFont(new java.awt.Font("Cantarell", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -144,6 +146,14 @@ public final class Main extends javax.swing.JFrame {
         getContentPane().add(btnVerTodosLosProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, -1, -1));
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 489, 10, 10));
 
+        btnEstado.setText("estado");
+        btnEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstadoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 420, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -203,6 +213,18 @@ public final class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnVerDetalleOrdenActionPerformed
 
+    private void btnEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadoActionPerformed
+        try {
+            int filaSeleccionada = tblOrdenes.getSelectedRow();
+            String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
+
+            new CambiarEstado(this, true, EstadoDAO.obtenerPorId(Integer.parseInt(id))).setVisible(true);
+
+        } catch (NumberFormatException e) {
+
+        }
+    }//GEN-LAST:event_btnEstadoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -250,7 +272,8 @@ public final class Main extends javax.swing.JFrame {
                         o.getFolio(),
                         "$" + o.getTotal(),
                         "$" + o.getSubtotal(),
-                        o.getFecha()
+                        o.getFecha(),
+                        o.getEstado()
                     }
             );
         }
@@ -261,6 +284,7 @@ public final class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizarOrden;
     private javax.swing.JButton btnAgregarOrden;
     private javax.swing.JButton btnEliminarOrden;
+    private javax.swing.JButton btnEstado;
     private javax.swing.JButton btnVerDetalleOrden;
     private javax.swing.JButton btnVerTodosLosArticulos;
     private javax.swing.JButton btnVerTodosLosProveedores;

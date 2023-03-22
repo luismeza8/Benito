@@ -27,6 +27,7 @@
         <mapping class="mx.itson.benito.entidades.Orden"/>
         <mapping class="mx.itson.benito.entidades.Pedido"/>
         <mapping class="mx.itson.benito.entidades.Proveedor"/>
+        <mapping class="mx.itson.benito.entidades.Estado"/>
     </session-factory>
     
 </hibernate-configuration>

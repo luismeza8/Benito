@@ -19,13 +19,23 @@ CREATE TABLE Articulo(
 	FOREIGN KEY (proveedorId) REFERENCES Proveedor(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE Estado (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	fecha Date,
+	estado INT DEFAULT 1,
+	comentario VARCHAR(100)
+) ENGINE=InnoDB;
+
 CREATE TABLE Orden(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	total DECIMAL(10, 2),
 	subtotal DECIMAL(10, 2),
 	comentario VARCHAR(100),
 	fecha DATE,
-	folio VARCHAR(10)
+	folio VARCHAR(10),
+	estado INT DEFAULT 1,
+	estadoComentario VARCHAR(100),
+	fechaEstado Date
 ) ENGINE=InnoDB;
 
 CREATE TABLE Pedido(
@@ -36,6 +46,7 @@ CREATE TABLE Pedido(
 	FOREIGN KEY (articuloId) REFERENCES Articulo(id) ON DELETE CASCADE,
 	FOREIGN KEY (ordenId) REFERENCES Orden(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
 
 DELIMITER //
 
@@ -125,3 +136,5 @@ VALUES
     (10, 5, 2),
     (4, 5, 8);
 
+--INSERT INTO Estado (fecha, estado, comentario) 
+--VALUES
