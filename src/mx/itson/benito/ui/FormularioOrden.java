@@ -1,21 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package mx.itson.benito.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Orden;
 import mx.itson.benito.entidades.Pedido;
 import mx.itson.benito.persistencia.OrdenDAO;
-import mx.itson.benito.persistencia.PedidoDAO;
 
 /**
+ * Formulario para agregar o editar una orden
  *
  * @author lm
  */
@@ -26,15 +21,15 @@ public class FormularioOrden extends javax.swing.JDialog {
     private final Orden orden;
     private List<Pedido> pedidos = new ArrayList<>();
     private Pedido pedido;
-    
+
     public Pedido getPedido() {
         return pedido;
     }
-    
+
     public void setPedido(Pedido o) {
         pedido = o;
     }
-    
+
     /**
      * Creates new form FormularioOrden
      */
@@ -43,17 +38,17 @@ public class FormularioOrden extends javax.swing.JDialog {
         initComponents();
         this.parent = parent;
         this.orden = orden;
-        
+
         modelPedidosTbl = (DefaultTableModel) tblPedidos.getModel();
-        
-        if(this.pedido != null) {
+
+        if (this.pedido != null) {
             llenarTabla(pedido);
         }
-        
-        if(this.orden != null) {
+
+        if (this.orden != null) {
             pedidos = orden.getPedidos();
         }
-        
+
         llenarFormulario();
     }
 
@@ -193,40 +188,39 @@ public class FormularioOrden extends javax.swing.JDialog {
 
     private void btnAgregarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarArticuloActionPerformed
         new AgregarArticuloOrden(parent, true, this).setVisible(true);
-        
+
         pedidos.add(pedido);
-        
-        if(this.pedido != null) {
+
+        if (this.pedido != null) {
             llenarTabla(pedido);
         }
     }//GEN-LAST:event_btnAgregarArticuloActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         try {
             Orden o = new Orden();
-            
+
             o.setTotal(0);
             o.setSubtotal(0);
             o.setComentario(tfdComentario.getText());
             o.setFecha(formato.parse(tfdFecha.getText()));
             o.setFolio(tfdFolio.getText());
-            
+
             for (Pedido p : pedidos) {
-                p.setOrden(o);             
+                p.setOrden(o);
                 //PedidoDAO.guardar(p.getArticulo(), p.getOrden(), p.getCantidad());
-                
-                if(this.orden != null) {
+
+                if (this.orden != null) {
                     OrdenDAO.editar(orden.getId(), pedidos, 0, 0, tfdComentario.getText(), formato.parse(tfdFecha.getText()), tfdFolio.getText());
                     //PedidoDAO.editar(p.getId(), p.getArticulo(), p.getOrden(), p.getCantidad());
-                    
-                    
-                } 
+
+                }
             }
-            
+
             this.dispose();
-            
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -235,12 +229,12 @@ public class FormularioOrden extends javax.swing.JDialog {
     private void btnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarArticuloActionPerformed
         try {
             int filaSeleccionada = tblPedidos.getSelectedRow();
-            
-            if(JOptionPane.showConfirmDialog(parent, "¿Quieres quitar este articulo?") == JOptionPane.YES_OPTION){
+
+            if (JOptionPane.showConfirmDialog(parent, "¿Quieres quitar este articulo?") == JOptionPane.YES_OPTION) {
                 modelPedidosTbl.removeRow(filaSeleccionada);
                 pedidos.remove(filaSeleccionada);
             }
-                    
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -287,22 +281,30 @@ public class FormularioOrden extends javax.swing.JDialog {
             }
         });
     }
-    
-    private void llenarTabla(Pedido pedido){            
-            modelPedidosTbl.addRow(
-                    new Object [] {
-                        pedido.getArticulo(),
-                        pedido.getCantidad()
+
+    /**
+     * Llena la tabla con los pedidos
+     *
+     * @param pedido El pedido
+     */
+    private void llenarTabla(Pedido pedido) {
+        modelPedidosTbl.addRow(
+                new Object[]{
+                    pedido.getArticulo(),
+                    pedido.getCantidad()
                 }
-            );
+        );
     }
-    
+
+    /**
+     * Llena el formulario si se va a editar una orden
+     */
     private void llenarFormulario() {
         if (this.orden != null) {
             tfdFolio.setText(orden.getFolio());
             tfdFecha.setText(orden.getFecha().toString());
             tfdComentario.setText(orden.getComentario());
-            
+
             for (Pedido p : orden.getPedidos()) {
                 llenarTabla(p);
             }

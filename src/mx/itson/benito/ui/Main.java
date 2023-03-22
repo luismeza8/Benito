@@ -1,19 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package mx.itson.benito.ui;
 
+import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Orden;
 import mx.itson.benito.persistencia.OrdenDAO;
 
 /**
+ * La interfaz principal
  *
  * @author lm
  */
-public class Main extends javax.swing.JFrame {
+public final class Main extends javax.swing.JFrame {
+
+    private final DefaultTableModel modelTblOrdenes;
 
     /**
      * Creates new form Main
@@ -148,27 +148,19 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblOrdenesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdenesMouseClicked
-        //int filaSeleccionada = tblOrdenes.getSelectedRow();
-        //String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
-        
-        //DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id)));
-        //j.setVisible(true);
     }//GEN-LAST:event_tblOrdenesMouseClicked
 
     private void btnVerTodosLosArticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosLosArticulosActionPerformed
-        Articulos articulos = new Articulos(this, true);
-        articulos.setVisible(true);
+        new Articulos(this, true).setVisible(true);
     }//GEN-LAST:event_btnVerTodosLosArticulosActionPerformed
 
     private void btnVerTodosLosProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodosLosProveedoresActionPerformed
-        Proveedores proveedores = new Proveedores(this, true);
-        proveedores.setVisible(true);
+        new Proveedores(this, true).setVisible(true);
     }//GEN-LAST:event_btnVerTodosLosProveedoresActionPerformed
 
     private void btnAgregarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarOrdenActionPerformed
-        FormularioOrden formularioOrden = new FormularioOrden(this, true, null);
-        formularioOrden.setVisible(true);
-        
+        new FormularioOrden(this, true, null).setVisible(true);
+
         modelTblOrdenes.setRowCount(0);
         llenarOrdenes();
     }//GEN-LAST:event_btnAgregarOrdenActionPerformed
@@ -177,10 +169,10 @@ public class Main extends javax.swing.JFrame {
         try {
             int filaSeleccionada = tblOrdenes.getSelectedRow();
             String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
-            
+
             new FormularioOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id))).setVisible(true);
-        } catch (Exception e) {
-            
+        } catch (NumberFormatException e) {
+
         }
     }//GEN-LAST:event_btnActualizarOrdenActionPerformed
 
@@ -188,15 +180,14 @@ public class Main extends javax.swing.JFrame {
         try {
             int filaSeleccionada = tblOrdenes.getSelectedRow();
             String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
-            
+
             if (JOptionPane.showConfirmDialog(this, "¿Deseas eliminar esta orden?") == JOptionPane.YES_OPTION) {
                 OrdenDAO.eliminar(Integer.parseInt(id));
                 modelTblOrdenes.setRowCount(0);
                 llenarOrdenes();
             }
-            
-            
-        } catch (Exception e) {
+
+        } catch (HeadlessException | NumberFormatException e) {
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarOrdenActionPerformed
@@ -204,17 +195,14 @@ public class Main extends javax.swing.JFrame {
     private void btnVerDetalleOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerDetalleOrdenActionPerformed
         try {
             int filaSeleccionada = tblOrdenes.getSelectedRow();
-        String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
-        
-        DetalleOrden j = new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id)));
-        j.setVisible(true);
-        } catch (Exception e) {
-            
+            String id = modelTblOrdenes.getValueAt(filaSeleccionada, 0).toString();
+
+            new DetalleOrden(this, true, OrdenDAO.obtenerPorId(Integer.parseInt(id))).setVisible(true);
+        } catch (NumberFormatException e) {
+
         }
     }//GEN-LAST:event_btnVerDetalleOrdenActionPerformed
 
-    DefaultTableModel modelTblOrdenes;
-    
     /**
      * @param args the command line arguments
      */
@@ -249,12 +237,15 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
-    
+
+    /**
+     * Llena la tabla de ordenes
+     */
     public void llenarOrdenes() {
-        
+
         for (Orden o : OrdenDAO.obtenerTodos()) {
             modelTblOrdenes.addRow(
-                    new Object[] {
+                    new Object[]{
                         o.getId(),
                         o.getFolio(),
                         "$" + o.getTotal(),
@@ -263,7 +254,7 @@ public class Main extends javax.swing.JFrame {
                     }
             );
         }
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

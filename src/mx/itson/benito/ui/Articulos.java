@@ -1,21 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package mx.itson.benito.ui;
 
+import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import mx.itson.benito.entidades.Articulo;
 import mx.itson.benito.persistencia.ArticuloDAO;
 
 /**
+ * Interfaz para ver los articulos
  *
  * @author lm
  */
 public class Articulos extends javax.swing.JDialog {
 
-    java.awt.Frame parent;
+    private final java.awt.Frame parent;
+    private final DefaultTableModel modelArticulosTbl;
 
     /**
      * Creates new form Articulos
@@ -137,7 +136,7 @@ public class Articulos extends javax.swing.JDialog {
                 llenarTabla();
             }
 
-        } catch (Exception e) {
+        } catch (HeadlessException | NumberFormatException e) {
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -146,10 +145,10 @@ public class Articulos extends javax.swing.JDialog {
         try {
             int filaSeleccionada = tblArticulos.getSelectedRow();
             String id = modelArticulosTbl.getValueAt(filaSeleccionada, 0).toString();
-            
+
             new FormularioArticulo(parent, true, ArticuloDAO.obtenerPorId(Integer.parseInt(id))).setVisible(true);
-            
-        } catch (Exception e) {
+
+        } catch (NumberFormatException e) {
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
@@ -196,6 +195,9 @@ public class Articulos extends javax.swing.JDialog {
         });
     }
 
+    /**
+     * Llena la tabla con todos los articulos existentes
+     */
     private void llenarTabla() {
         for (Articulo a : ArticuloDAO.obtenerTodos()) {
             modelArticulosTbl.addRow(
@@ -209,8 +211,6 @@ public class Articulos extends javax.swing.JDialog {
             );
         }
     }
-
-    DefaultTableModel modelArticulosTbl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;

@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ * El proveedor que vende los articulos
  * @author lm
  */
 @Entity

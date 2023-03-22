@@ -7,14 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 /**
- *
+ * El articulo y su cantidad
  * @author lm
  */
 @Entity
@@ -23,7 +20,6 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    // Cardinalidad de 1:1
     @ManyToOne(cascade = CascadeType.MERGE)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "articuloId")

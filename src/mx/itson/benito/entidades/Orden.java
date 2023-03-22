@@ -7,13 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
+ * La convinacion de pedidos
  * @author lm
  */
 @Entity
@@ -23,7 +22,6 @@ public class Orden {
     private int id;
     
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JoinColumn(name ="ordenId")
     private List<Pedido> pedidos;
     
     private double total;

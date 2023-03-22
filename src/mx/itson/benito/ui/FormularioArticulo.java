@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package mx.itson.benito.ui;
 
 import javax.swing.DefaultComboBoxModel;
@@ -11,12 +7,13 @@ import mx.itson.benito.persistencia.ArticuloDAO;
 import mx.itson.benito.persistencia.ProveedorDAO;
 
 /**
+ * Formulario para agregar o editar un articulo
  *
  * @author lm
  */
 public class FormularioArticulo extends javax.swing.JDialog {
 
-    Articulo articulo;
+    private final Articulo articulo;
 
     /**
      * Creates new form FormularioArticulo
@@ -143,7 +140,7 @@ public class FormularioArticulo extends javax.swing.JDialog {
             }
 
             this.dispose();
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -190,6 +187,9 @@ public class FormularioArticulo extends javax.swing.JDialog {
         });
     }
 
+    /**
+     * Llena el combo box con todos los proveedores existentes
+     */
     private void llenarComboBox() {
         DefaultComboBoxModel modelProveedoresCbx = (DefaultComboBoxModel) cbxProveedor.getModel();
 
@@ -200,6 +200,9 @@ public class FormularioArticulo extends javax.swing.JDialog {
         cbxProveedor.setModel(modelProveedoresCbx);
     }
 
+    /**
+     * Llena el formulario si se va a editar un articulo
+     */
     private void llenarFormulario() {
         try {
             if (this.articulo != null) {

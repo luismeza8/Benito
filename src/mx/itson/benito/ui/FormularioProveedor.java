@@ -1,19 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package mx.itson.benito.ui;
 
 import mx.itson.benito.entidades.Proveedor;
 import mx.itson.benito.persistencia.ProveedorDAO;
 
 /**
+ * Formulario para agregar o editar un proveedor
  *
  * @author lm
  */
 public class FormularioProveedor extends javax.swing.JDialog {
 
-    Proveedor proveedor;
+    private final Proveedor proveedor;
 
     /**
      * Creates new form FormularioProveedor
@@ -193,6 +190,11 @@ public class FormularioProveedor extends javax.swing.JDialog {
         });
     }
 
+    /**
+     * Llena el formulario si se va a editar un proveedor
+     *
+     * @param p El provedor
+     */
     private void llenarFormulario(Proveedor p) {
         try {
             if (this.proveedor != null) {

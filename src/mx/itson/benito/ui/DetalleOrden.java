@@ -1,25 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package mx.itson.benito.ui;
 
-import java.awt.Frame;
 import javax.swing.table.DefaultTableModel;
-import mx.itson.benito.entidades.Articulo;
 import mx.itson.benito.entidades.Orden;
 import mx.itson.benito.entidades.Pedido;
-import mx.itson.benito.persistencia.ArticuloDAO;
 
 /**
+ * Interfaz con el detalle de la orden
  *
  * @author lm
  */
 public class DetalleOrden extends javax.swing.JDialog {
 
-    Orden orden;
-    Frame frame;
-    
+    private final DefaultTableModel modelPedidosTbl;
+    private final Orden orden;
+
     /**
      * Creates new form DetalleOrden
      */
@@ -27,12 +21,11 @@ public class DetalleOrden extends javax.swing.JDialog {
         super(parent, modal);
         setModal(true);
         initComponents();
-        
+
         modelPedidosTbl = (DefaultTableModel) tblArticulos.getModel();
-        
+
         this.orden = orden;
-        this.frame = parent;
-        
+
         llenarOrden();
     }
 
@@ -124,7 +117,7 @@ public class DetalleOrden extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblArticulosMouseClicked
-        
+
     }//GEN-LAST:event_tblArticulosMouseClicked
 
     /**
@@ -168,9 +161,10 @@ public class DetalleOrden extends javax.swing.JDialog {
             }
         });
     }
-    
-    DefaultTableModel modelPedidosTbl;
-    
+
+    /**
+     * Llena la informacion de la orden
+     */
     private void llenarOrden() {
         txtTitulo.setText(txtTitulo.getText() + orden.getFolio());
         llenarTablaArticulos();
@@ -179,13 +173,16 @@ public class DetalleOrden extends javax.swing.JDialog {
         txtTotal.setText("Total: " + orden.getTotal());
         txtSubtotal.setText("Subtotal: " + orden.getSubtotal());
     }
-    
-    private void llenarTablaArticulos(){
-        int index = 1; 
-        
+
+    /**
+     * Llena la tabla de los articulos
+     */
+    private void llenarTablaArticulos() {
+        int index = 1;
+
         for (Pedido p : orden.getPedidos()) {
             modelPedidosTbl.addRow(
-                    new Object[] {
+                    new Object[]{
                         index++,
                         p.getArticulo().getNombre(),
                         p.getCantidad(),

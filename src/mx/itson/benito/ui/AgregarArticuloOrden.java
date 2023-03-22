@@ -1,23 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package mx.itson.benito.ui;
 
 import javax.swing.DefaultComboBoxModel;
 import mx.itson.benito.entidades.Articulo;
 import mx.itson.benito.entidades.Pedido;
 import mx.itson.benito.persistencia.ArticuloDAO;
-import mx.itson.benito.persistencia.PedidoDAO;
 
 /**
+ * La interfaz para agregar un articulo a una orden
  *
  * @author lm
  */
 public class AgregarArticuloOrden extends javax.swing.JDialog {
 
-    FormularioOrden parent;
-    
+    private FormularioOrden parent;
+
     /**
      * Creates new form AgregarArticuloOrden
      */
@@ -25,7 +21,7 @@ public class AgregarArticuloOrden extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.parent = parentScreen;
-        
+
         llenarComboBox();
     }
 
@@ -88,12 +84,10 @@ public class AgregarArticuloOrden extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         Pedido p = new Pedido();
-        
+
         p.setArticulo((Articulo) cbxArticulos.getSelectedItem());
         p.setCantidad(Integer.parseInt(tfdCantidad.getText()));
-        
-        //PedidoDAO.guardar(p.getArticulo(), p.getOrden(), p.getCantidad());
-        
+
         parent.setPedido(p);
         this.dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -139,14 +133,17 @@ public class AgregarArticuloOrden extends javax.swing.JDialog {
             }
         });
     }
-    
+
+    /**
+     * Llena el combo box con todos los articulos existentes
+     */
     private void llenarComboBox() {
         DefaultComboBoxModel modelArticulosCbx = (DefaultComboBoxModel) cbxArticulos.getModel();
-        
+
         for (Articulo a : ArticuloDAO.obtenerTodos()) {
             modelArticulosCbx.addElement(a);
         }
-        
+
         cbxArticulos.setModel(modelArticulosCbx);
     }
 
