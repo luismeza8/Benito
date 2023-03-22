@@ -100,6 +100,11 @@ public class Main extends javax.swing.JFrame {
         getContentPane().add(btnEliminarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 460, -1, -1));
 
         btnActualizarOrden.setText("Actualizar orden");
+        btnActualizarOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarOrdenActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnActualizarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, -1, -1));
 
         btnVerDetalleOrden.setText("Ver detalle de la orden");
@@ -153,6 +158,10 @@ public class Main extends javax.swing.JFrame {
         FormularioOrden formularioOrden = new FormularioOrden(this, true);
         formularioOrden.setVisible(true);
     }//GEN-LAST:event_btnAgregarOrdenActionPerformed
+
+    private void btnActualizarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarOrdenActionPerformed
+        
+    }//GEN-LAST:event_btnActualizarOrdenActionPerformed
 
     DefaultTableModel modelTblOrdenes;
     

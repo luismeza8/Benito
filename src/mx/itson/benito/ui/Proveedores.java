@@ -16,17 +16,17 @@ import mx.itson.benito.persistencia.ProveedorDAO;
  */
 public class Proveedores extends javax.swing.JDialog {
 
-    Frame frame;
-    
+    Frame parent;
+
     /**
      * Creates new form Proveedores
      */
     public Proveedores(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.frame = parent;
+        this.parent = parent;
         this.modelProveedoresTbl = (DefaultTableModel) tblProveedores.getModel();
-        
+
         llenarTabla();
     }
 
@@ -104,6 +104,11 @@ public class Proveedores extends javax.swing.JDialog {
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 300, -1, -1));
 
         btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, -1, -1));
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 10, 10));
 
@@ -122,28 +127,42 @@ public class Proveedores extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        FormularioProveedor formularioProveedor = new FormularioProveedor(frame, true);
+        FormularioProveedor formularioProveedor = new FormularioProveedor(parent, true, null);
         formularioProveedor.setVisible(true);
         modelProveedoresTbl.setRowCount(0);
         llenarTabla();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
+
         try {
             int filaSeleccionada = tblProveedores.getSelectedRow();
             String id = modelProveedoresTbl.getValueAt(filaSeleccionada, 0).toString();
-        
+
             if (JOptionPane.showConfirmDialog(this, "¿Deseas eliminar este proveedor?") == JOptionPane.YES_OPTION) {
                 modelProveedoresTbl.setNumRows(0);
                 llenarTabla();
                 ProveedorDAO.eliminar(Integer.parseInt(id));
             }
-            
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        try {
+            int filaSeleccionada = tblProveedores.getSelectedRow();
+            String id = modelProveedoresTbl.getValueAt(filaSeleccionada, 0).toString();
+            
+            new FormularioProveedor(parent, true, ProveedorDAO.obtenerPorId(Integer.parseInt(id))).setVisible(true);
+            
+            modelProveedoresTbl.setRowCount(0);
+            llenarTabla();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -186,11 +205,11 @@ public class Proveedores extends javax.swing.JDialog {
             }
         });
     }
-    
-    private void llenarTabla() {        
+
+    private void llenarTabla() {
         for (Proveedor p : ProveedorDAO.obtenerTodos()) {
             modelProveedoresTbl.addRow(
-                    new Object[] {
+                    new Object[]{
                         p.getId(),
                         p.getNombre(),
                         p.getDireccion(),
@@ -199,9 +218,9 @@ public class Proveedores extends javax.swing.JDialog {
                         p.getContacto()
                     }
             );
-        }            
+        }
     }
-    
+
     DefaultTableModel modelProveedoresTbl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

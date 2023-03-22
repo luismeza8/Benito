@@ -16,7 +16,7 @@ import mx.itson.benito.persistencia.ArticuloDAO;
 public class Articulos extends javax.swing.JDialog {
 
     java.awt.Frame parent;
-    
+
     /**
      * Creates new form Articulos
      */
@@ -25,7 +25,7 @@ public class Articulos extends javax.swing.JDialog {
         initComponents();
         this.parent = parent;
         this.modelArticulosTbl = (DefaultTableModel) tblArticulos.getModel();
-        
+
         llenarTabla();
     }
 
@@ -99,6 +99,11 @@ public class Articulos extends javax.swing.JDialog {
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 300, -1, -1));
 
         btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -116,7 +121,7 @@ public class Articulos extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        new FormularioArticulo(parent, true).setVisible(true);
+        new FormularioArticulo(parent, true, null).setVisible(true);
         modelArticulosTbl.setRowCount(0);
         llenarTabla();
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -125,17 +130,29 @@ public class Articulos extends javax.swing.JDialog {
         try {
             int filaSeleccionada = tblArticulos.getSelectedRow();
             String id = modelArticulosTbl.getValueAt(filaSeleccionada, 0).toString();
-            
+
             if (JOptionPane.showConfirmDialog(parent, "¿Deseas eliminar este articulo?") == JOptionPane.YES_OPTION) {
                 ArticuloDAO.eliminar(Integer.parseInt(id));
                 modelArticulosTbl.setRowCount(0);
                 llenarTabla();
             }
-            
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        try {
+            int filaSeleccionada = tblArticulos.getSelectedRow();
+            String id = modelArticulosTbl.getValueAt(filaSeleccionada, 0).toString();
+            
+            new FormularioArticulo(parent, true, ArticuloDAO.obtenerPorId(Integer.parseInt(id))).setVisible(true);
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,21 +195,21 @@ public class Articulos extends javax.swing.JDialog {
             }
         });
     }
-    
-    private void llenarTabla() {        
+
+    private void llenarTabla() {
         for (Articulo a : ArticuloDAO.obtenerTodos()) {
             modelArticulosTbl.addRow(
-                new Object[] {
-                    a.getId(),
-                    a.getNombre(),
-                    a.getPrecio(),
-                    a.getFolio(),
-                    a.getProveedor().getNombre()
-                }
-        );
+                    new Object[]{
+                        a.getId(),
+                        a.getNombre(),
+                        a.getPrecio(),
+                        a.getFolio(),
+                        a.getProveedor().getNombre()
+                    }
+            );
         }
     }
-    
+
     DefaultTableModel modelArticulosTbl;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

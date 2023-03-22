@@ -5,6 +5,7 @@
 package mx.itson.benito.ui;
 
 import javax.swing.DefaultComboBoxModel;
+import mx.itson.benito.entidades.Articulo;
 import mx.itson.benito.entidades.Proveedor;
 import mx.itson.benito.persistencia.ArticuloDAO;
 import mx.itson.benito.persistencia.ProveedorDAO;
@@ -15,13 +16,18 @@ import mx.itson.benito.persistencia.ProveedorDAO;
  */
 public class FormularioArticulo extends javax.swing.JDialog {
 
+    Articulo articulo;
+
     /**
      * Creates new form FormularioArticulo
      */
-    public FormularioArticulo(java.awt.Frame parent, boolean modal) {
+    public FormularioArticulo(java.awt.Frame parent, boolean modal, Articulo articulo) {
         super(parent, modal);
         initComponents();
+        this.articulo = articulo;
+
         llenarComboBox();
+        llenarFormulario();
     }
 
     /**
@@ -117,15 +123,25 @@ public class FormularioArticulo extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         Proveedor p = (Proveedor) cbxProveedor.getSelectedItem();
-        
-        try {            
-            ArticuloDAO.guardar(
-                    tfdNombre.getText(), 
-                    Double.parseDouble(tfdPrecio.getText()), 
-                    tfdFolio.getText(), 
-                    p
-            );
-            
+
+        try {
+            if (this.articulo != null) {
+                ArticuloDAO.editar(
+                        articulo.getId(),
+                        tfdNombre.getText(),
+                        Double.parseDouble(tfdPrecio.getText()),
+                        tfdFolio.getText(),
+                        p
+                );
+            } else {
+                ArticuloDAO.guardar(
+                        tfdNombre.getText(),
+                        Double.parseDouble(tfdPrecio.getText()),
+                        tfdFolio.getText(),
+                        p
+                );
+            }
+
             this.dispose();
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -162,7 +178,7 @@ public class FormularioArticulo extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FormularioArticulo dialog = new FormularioArticulo(new javax.swing.JFrame(), true);
+                FormularioArticulo dialog = new FormularioArticulo(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -173,15 +189,29 @@ public class FormularioArticulo extends javax.swing.JDialog {
             }
         });
     }
-    
+
     private void llenarComboBox() {
         DefaultComboBoxModel modelProveedoresCbx = (DefaultComboBoxModel) cbxProveedor.getModel();
-        
+
         for (Proveedor p : ProveedorDAO.obtenerTodos()) {
             modelProveedoresCbx.addElement(p);
         }
-        
+
         cbxProveedor.setModel(modelProveedoresCbx);
+    }
+
+    private void llenarFormulario() {
+        try {
+            if (this.articulo != null) {
+                tfdNombre.setText(articulo.getNombre());
+                tfdPrecio.setText(String.valueOf(articulo.getPrecio()));
+                tfdFolio.setText(articulo.getFolio());
+                cbxProveedor.setSelectedItem(articulo.getProveedor());
+            }
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

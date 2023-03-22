@@ -4,6 +4,7 @@
  */
 package mx.itson.benito.ui;
 
+import mx.itson.benito.entidades.Proveedor;
 import mx.itson.benito.persistencia.ProveedorDAO;
 
 /**
@@ -12,12 +13,17 @@ import mx.itson.benito.persistencia.ProveedorDAO;
  */
 public class FormularioProveedor extends javax.swing.JDialog {
 
+    Proveedor proveedor;
+
     /**
      * Creates new form FormularioProveedor
      */
-    public FormularioProveedor(java.awt.Frame parent, boolean modal) {
+    public FormularioProveedor(java.awt.Frame parent, boolean modal, Proveedor proveedor) {
         super(parent, modal);
         initComponents();
+        this.proveedor = proveedor;
+
+        llenarFormulario(proveedor);
     }
 
     /**
@@ -119,14 +125,26 @@ public class FormularioProveedor extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         try {
-            ProveedorDAO.guardar(
-                    tfdNombre.getText(),
-                    tfdDireccion.getText(), 
-                    tfdTelefono.getText(), 
-                    tfdEmail.getText(), 
-                    tfdContacto.getText()
-            );
-            
+
+            if (this.proveedor != null) {
+                ProveedorDAO.editar(
+                        proveedor.getId(),
+                        tfdNombre.getText(),
+                        tfdDireccion.getText(),
+                        tfdTelefono.getText(),
+                        tfdEmail.getText(),
+                        tfdContacto.getText()
+                );
+            } else {
+                ProveedorDAO.guardar(
+                        tfdNombre.getText(),
+                        tfdDireccion.getText(),
+                        tfdTelefono.getText(),
+                        tfdEmail.getText(),
+                        tfdContacto.getText()
+                );
+            }
+
             this.dispose();
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -163,7 +181,7 @@ public class FormularioProveedor extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FormularioProveedor dialog = new FormularioProveedor(new javax.swing.JFrame(), true);
+                FormularioProveedor dialog = new FormularioProveedor(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -173,6 +191,20 @@ public class FormularioProveedor extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+
+    private void llenarFormulario(Proveedor p) {
+        try {
+            if (this.proveedor != null) {
+                tfdNombre.setText(p.getNombre());
+                tfdDireccion.setText(p.getDireccion());
+                tfdTelefono.setText(p.getTelefono());
+                tfdEmail.setText(p.getEmail());
+                tfdContacto.setText(p.getContacto());
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
