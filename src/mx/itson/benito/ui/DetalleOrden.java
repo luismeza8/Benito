@@ -61,36 +61,53 @@ public class DetalleOrden extends javax.swing.JDialog {
         txtTitulo.setFont(new java.awt.Font("sansserif", 0, 22)); // NOI18N
         txtTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtTitulo.setText("Orden: ");
-        jPanel1.add(txtTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 70));
+        jPanel1.add(txtTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 70));
 
         tblArticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Numero", "Articulo", "Cantidad"
+                "N", "Articulo", "Cantidad", "Proveedor", "Precio", "Folio"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblArticulos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblArticulosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblArticulos);
+        if (tblArticulos.getColumnModel().getColumnCount() > 0) {
+            tblArticulos.getColumnModel().getColumn(0).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tblArticulos.getColumnModel().getColumn(1).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(2).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(3).setResizable(false);
+            tblArticulos.getColumnModel().getColumn(5).setResizable(false);
+        }
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 400, 410));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 600, 260));
 
         txtFecha.setText("---");
-        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 280, 30));
+        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 70, 280, 30));
 
+        txtComentario.setText("---");
         txtComentario.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jPanel1.add(txtComentario, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 280, 80));
+        jPanel1.add(txtComentario, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, 280, 30));
 
         txtSubtotal.setText("---");
-        jPanel1.add(txtSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, 120, 30));
+        jPanel1.add(txtSubtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, 120, 30));
 
         txtTotal.setText("---");
-        jPanel1.add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 229, 120, 30));
+        jPanel1.add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, 120, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -107,11 +124,6 @@ public class DetalleOrden extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblArticulosMouseClicked
-        int filaSeleccionada = tblArticulos.getSelectedRow();
-        String id = modelPedidosTbl.getValueAt(filaSeleccionada, 0).toString();
-        
-        DetalleArticulo a = new DetalleArticulo(frame, true, ArticuloDAO.obtenerPorId(Integer.parseInt(id)));
-        a.setVisible(true);
         
     }//GEN-LAST:event_tblArticulosMouseClicked
 
@@ -176,7 +188,10 @@ public class DetalleOrden extends javax.swing.JDialog {
                     new Object[] {
                         index++,
                         p.getArticulo().getNombre(),
-                        p.getCantidad()
+                        p.getCantidad(),
+                        p.getArticulo().getProveedor().getNombre(),
+                        p.getArticulo().getPrecio(),
+                        p.getArticulo().getFolio()
                     }
             );
         }

@@ -34,6 +34,16 @@ public class Main extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblOrdenes = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btnAgregarOrden = new javax.swing.JButton();
+        btnEliminarOrden = new javax.swing.JButton();
+        btnActualizarOrden = new javax.swing.JButton();
+        btnVerDetalleOrden = new javax.swing.JButton();
+        btnVerTodosLosArticulos = new javax.swing.JButton();
+        txtTotalArticulos = new javax.swing.JLabel();
+        txtTotalProveedores = new javax.swing.JLabel();
+        btnVerTodosLosProveedores = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -67,7 +77,39 @@ public class Main extends javax.swing.JFrame {
             tblOrdenes.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 900, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 260));
+
+        jLabel1.setFont(new java.awt.Font("Cantarell", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("LLANTERA");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 50));
+
+        jLabel2.setText("Ordenes:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, -1, -1));
+
+        btnAgregarOrden.setText("Agregar orden");
+        getContentPane().add(btnAgregarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, -1, -1));
+
+        btnEliminarOrden.setText("Eliminar orden");
+        getContentPane().add(btnEliminarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 460, -1, -1));
+
+        btnActualizarOrden.setText("Actualizar orden");
+        getContentPane().add(btnActualizarOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, -1, -1));
+
+        btnVerDetalleOrden.setText("Ver detalle de la orden");
+        getContentPane().add(btnVerDetalleOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 460, -1, -1));
+
+        btnVerTodosLosArticulos.setText("Ver todos los articulos");
+        getContentPane().add(btnVerTodosLosArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, -1, -1));
+
+        txtTotalArticulos.setText("Total de articulos: ");
+        getContentPane().add(txtTotalArticulos, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, -1, -1));
+
+        txtTotalProveedores.setText("Total de proveedores: ");
+        getContentPane().add(txtTotalProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, -1, -1));
+
+        btnVerTodosLosProveedores.setText("Ver todos los proveedores");
+        getContentPane().add(btnVerTodosLosProveedores, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 110, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -134,7 +176,17 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarOrden;
+    private javax.swing.JButton btnAgregarOrden;
+    private javax.swing.JButton btnEliminarOrden;
+    private javax.swing.JButton btnVerDetalleOrden;
+    private javax.swing.JButton btnVerTodosLosArticulos;
+    private javax.swing.JButton btnVerTodosLosProveedores;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblOrdenes;
+    private javax.swing.JLabel txtTotalArticulos;
+    private javax.swing.JLabel txtTotalProveedores;
     // End of variables declaration//GEN-END:variables
 }
