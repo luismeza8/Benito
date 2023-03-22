@@ -29,7 +29,7 @@ public class Pedido {
     @JoinColumn(name = "articuloId")
     private Articulo articulo;
     
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "ordenId")
     private Orden orden;

@@ -70,5 +70,8 @@ public class Articulo {
         this.proveedor = proveedor;
     }
     
-    
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

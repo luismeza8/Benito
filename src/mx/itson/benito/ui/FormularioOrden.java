@@ -4,18 +4,46 @@
  */
 package mx.itson.benito.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import mx.itson.benito.entidades.Orden;
+import mx.itson.benito.entidades.Pedido;
+import mx.itson.benito.persistencia.OrdenDAO;
+import mx.itson.benito.persistencia.PedidoDAO;
+
 /**
  *
  * @author lm
  */
 public class FormularioOrden extends javax.swing.JDialog {
 
+    java.awt.Frame parent;
+    private Pedido pedido;
+    List<Pedido> pedidos = new ArrayList<>();
+    DefaultTableModel modelPedidosTbl;
+    
+    public Pedido getPedido() {
+        return pedido;
+    }
+    
+    public void setPedido(Pedido o) {
+        pedido = o;
+    }
+    
     /**
      * Creates new form FormularioOrden
      */
     public FormularioOrden(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.parent = parent;
+        
+        modelPedidosTbl = (DefaultTableModel) tblPedidos.getModel();
+        llenarTabla();
     }
 
     /**
@@ -30,7 +58,7 @@ public class FormularioOrden extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblArticulos = new javax.swing.JTable();
+        tblPedidos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         tfdFolio = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -52,15 +80,28 @@ public class FormularioOrden extends javax.swing.JDialog {
         jLabel1.setText("Orden");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 40));
 
-        tblArticulos.setModel(new javax.swing.table.DefaultTableModel(
+        tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "Articulo", "Cantidad"
             }
-        ));
-        jScrollPane1.setViewportView(tblArticulos);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblPedidos);
+        if (tblPedidos.getColumnModel().getColumnCount() > 0) {
+            tblPedidos.getColumnModel().getColumn(0).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(1).setResizable(false);
+            tblPedidos.getColumnModel().getColumn(1).setPreferredWidth(2);
+        }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 280, 170));
 
@@ -94,12 +135,27 @@ public class FormularioOrden extends javax.swing.JDialog {
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 460, -1, -1));
 
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 460, -1, -1));
 
         btnAgregarArticulo.setText("Agregar articulo");
+        btnAgregarArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarArticuloActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAgregarArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 140, -1));
 
         btnQuitarArticulo.setText("Quitar articulo");
+        btnQuitarArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarArticuloActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnQuitarArticulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 240, 130, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -121,8 +177,55 @@ public class FormularioOrden extends javax.swing.JDialog {
     }//GEN-LAST:event_tfdFolioActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAgregarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarArticuloActionPerformed
+        new AgregarArticuloOrden(parent, true, this).setVisible(true);
+        
+        pedidos.add(pedido);
+        
+        llenarTabla();
+    }//GEN-LAST:event_btnAgregarArticuloActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        
+        try {
+            Orden o = new Orden();
+            
+            o.setTotal(0);
+            o.setSubtotal(0);
+            o.setComentario(tfdComentario.getText());
+            o.setFecha(formato.parse(tfdFecha.getText()));
+            o.setFolio(tfdFolio.getText());
+            
+            for (Pedido p : pedidos) {
+                p.setOrden(o);
+                PedidoDAO.guardar(p.getArticulo(), p.getOrden(), p.getCantidad());
+            }
+            
+            this.dispose();
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void btnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarArticuloActionPerformed
+        try {
+            int filaSeleccionada = tblPedidos.getSelectedRow();
+            String id = modelPedidosTbl.getValueAt(filaSeleccionada, 0).toString();
+            
+            if(JOptionPane.showConfirmDialog(parent, "¿Quieres quitar este articulo?") == JOptionPane.YES_OPTION){
+                modelPedidosTbl.removeRow(filaSeleccionada);
+                pedidos.remove(filaSeleccionada);
+            }
+                    
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnQuitarArticuloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,6 +268,17 @@ public class FormularioOrden extends javax.swing.JDialog {
             }
         });
     }
+    
+    public void llenarTabla(){
+        if (pedido != null) {            
+            modelPedidosTbl.addRow(
+                    new Object [] {
+                        this.pedido.getArticulo(),
+                        this.pedido.getCantidad()
+                }
+            );
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
@@ -178,7 +292,7 @@ public class FormularioOrden extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblArticulos;
+    private javax.swing.JTable tblPedidos;
     private javax.swing.JTextField tfdComentario;
     private javax.swing.JTextField tfdFecha;
     private javax.swing.JTextField tfdFolio;

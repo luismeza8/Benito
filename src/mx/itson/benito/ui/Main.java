@@ -163,6 +163,9 @@ public class Main extends javax.swing.JFrame {
     private void btnAgregarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarOrdenActionPerformed
         FormularioOrden formularioOrden = new FormularioOrden(this, true);
         formularioOrden.setVisible(true);
+        
+        modelTblOrdenes.setRowCount(0);
+        llenarOrdenes();
     }//GEN-LAST:event_btnAgregarOrdenActionPerformed
 
     private void btnActualizarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarOrdenActionPerformed
@@ -218,7 +221,6 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                OrdenDAO.eliminar(1);
                 new Main().setVisible(true);
             }
         });

@@ -36,9 +36,12 @@ public class OrdenDAO {
     }
     
     public static boolean guardar(List<Pedido> pedidos, double total, double subtotal, String comentario, Date fecha, String folio) {
+        //, double total, double subtotal, String comentario, Date fecha, String folio
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
+            
+            
             
             Orden o = new Orden();
             o.setPedidos(pedidos);

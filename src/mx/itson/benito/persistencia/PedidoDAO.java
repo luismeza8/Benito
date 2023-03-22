@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
 import mx.itson.benito.entidades.Articulo;
+import mx.itson.benito.entidades.Orden;
 import mx.itson.benito.entidades.Pedido;
 import mx.itson.benito.utilerias.HibernateUtil;
 import org.hibernate.HibernateException;
@@ -34,13 +35,14 @@ public class PedidoDAO {
         return pedidos;
     }
     
-    public static boolean guardar(Articulo articulo, int cantidad) {
+    public static boolean guardar(Articulo articulo, Orden orden, int cantidad) {
         try {
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
 
             Pedido p = new Pedido();
             p.setArticulo(articulo);
+            p.setOrden(orden);
             p.setCantidad(cantidad);
 
             session.save(p);
